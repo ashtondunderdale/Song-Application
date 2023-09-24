@@ -13,6 +13,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * This class defines constants to be used in the menu interface,
@@ -128,7 +129,21 @@ public class SongApplication {
      */   
     public static void addSong(){
         System.out.println("\tAdd Songs\n\nEnter the name of the song you would like to add.");
-    }
+        
+        String songName = userInput.nextLine();
+        System.out.println("\nEnter the Artist name for this song.");
+        String artistName = userInput.nextLine();
+        
+        System.out.println("\nEnter the Duration of the song in this format: 2:15");
+        String durationString = userInput.nextLine();
+        
+        // initialise random class
+        Random rand = new Random();
+        int playCount = rand.nextInt(1000000000); // upper bound: 1 billion
+                
+                songs.add(new Song(songName, artistName, durationString, playCount));
+                System.out.println("Press Enter to return to the menu.");
+    }   
     
     
      /**
