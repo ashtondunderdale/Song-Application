@@ -45,15 +45,15 @@ public class SongApplication {
     public static void main(String[] args) {
         
         songs.add(new Song("Let It Happen", "Tame Impala", "4:16", 108998497));
-        songs.add(new Song("Poker Face", "Lady Gaga", "3:34", 1210515591));
-        songs.add(new Song("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
-        songs.add(new Song("The Less I Know The Better", "TameImpala", "3:37", 557449061));
-        songs.add(new Song("Bohemian Rhapsody", "Queen", "5:55", 758473934));
-        songs.add(new Song("Rolling in the Deep", "Adele", "3:38", 123955524));
-        songs.add(new Song("Billie Jean", "Micheal  Jackson", "4:54", 98746375));
-        songs.add(new Song("Stairway to Heaven", "Led Zeppelin", "8:02", 429483942));
-        songs.add(new Song("Shape of You", "Ed Sheeran", "3:353", 77642142));
-        songs.add(new Song("Uptown Funk", "Mark Ronson ft. Bruno Mars", "4:31", 223454389));
+//        songs.add(new Song("Poker Face", "Lady Gaga", "3:34", 1210515591));
+//        songs.add(new Song("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
+//        songs.add(new Song("The Less I Know The Better", "TameImpala", "3:37", 557449061));
+//        songs.add(new Song("Bohemian Rhapsody", "Queen", "5:55", 758473934));
+//        songs.add(new Song("Rolling in the Deep", "Adele", "3:38", 123955524));
+//        songs.add(new Song("Billie Jean", "Micheal  Jackson", "4:54", 98746375));
+//        songs.add(new Song("Stairway to Heaven", "Led Zeppelin", "8:02", 429483942));
+//        songs.add(new Song("Shape of You", "Ed Sheeran", "3:353", 77642142));
+//        songs.add(new Song("Uptown Funk", "Mark Ronson ft. Bruno Mars", "4:31", 223454389));
         
         // calls initial method
         processMenuChoice(); 
@@ -142,7 +142,7 @@ public class SongApplication {
         int playCount = rand.nextInt(1000000000); // upper bound: 1 billion
                 
         songs.add(new Song(songName, artistName, durationString, playCount));
-        System.out.println("Press Enter to return to the menu.");
+        System.out.println(returnToMenuStatement());
     }   
     
     
@@ -150,6 +150,8 @@ public class SongApplication {
      * Removes a chosen song 
      */   
     public static void removeSong(){
+        returnEmptySongStatement();
+        
         System.out.println("\tRemove Songs\n\nEnter the name of the song you would like to remove.");
         
         String songToRemove = userInput.nextLine();
@@ -163,10 +165,10 @@ public class SongApplication {
         
         if (!songsToRemove.isEmpty()) { // if array is not empty, remove all items
             songs.removeAll(songsToRemove);
-            System.out.println("\nThe Song " + songToRemove + " has been removed.\n");
+            System.out.println("\nThe Song " + songToRemove + " has been removed.\n" + returnToMenuStatement());
             userInput.nextLine();
         } else{
-            System.out.println("\nThe song " + songToRemove + " could not be found.\n");
+            System.out.println("\nThe song " + songToRemove + " could not be found.\n" + returnToMenuStatement());
             userInput.nextLine();
         }
     }
@@ -176,6 +178,8 @@ public class SongApplication {
      * Shows a list of all songs
      */   
     public static void viewSongs(){
+        returnEmptySongStatement();
+                
         System.out.println("\tView Songs\n");
         
         int songCounter = 0;
@@ -186,7 +190,7 @@ public class SongApplication {
             String formattedCounter = String.format("%-" + songCounterLength + "s", songCounter);
             System.out.println(formattedCounter + song);
         }
-        System.out.println("Press Enter to return to menu");
+        System.out.println(returnToMenuStatement());
         userInput.nextLine();
     }
     
@@ -195,6 +199,8 @@ public class SongApplication {
      * Shows the top ten songs in order of play count
      */   
     public static void viewTopSongs(){
+        returnEmptySongStatement();
+        
         System.out.println("\tView Most Played Songs\n");
         
         int topSongCounter = 0;
@@ -211,7 +217,7 @@ public class SongApplication {
                 break;
             }
         }
-        System.out.println("Press Enter to return to the menu.");
+        System.out.println(returnToMenuStatement());
         userInput.nextLine();
     }
     
@@ -223,5 +229,22 @@ public class SongApplication {
         System.out.println("Thank you for using the song application. The Program will now close.");
         userInput.close();
         System.exit(0);
+    }
+    
+    /**
+     * @return a string prompting the user to press enter to return to the menu
+     */
+    public static String returnToMenuStatement(){ // recursive
+        String returnToMenuString = "\nPress the enter key to return to the menu";
+        return returnToMenuString;
+    }
+    
+    public static void returnEmptySongStatement(){ // recursive
+        
+        if (songs.isEmpty()){
+            System.out.println("There are no songs stored, add songs first to use other features.\n" + returnToMenuStatement());
+            userInput.nextLine();
+            processMenuChoice();
+        }
     }
 }
