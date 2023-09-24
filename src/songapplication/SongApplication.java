@@ -111,7 +111,8 @@ public class SongApplication {
      * Shows a list of all songs
      */   
     public static void viewSongs(){
-    
+        System.out.println("\tView Songs\n");
+        
     }
     
     
@@ -119,7 +120,7 @@ public class SongApplication {
      * Shows the top ten songs in order of play count
      */   
     public static void viewTopSongs(){
-    
+        System.out.println("\tView Most Played Songs\n");
     }
     
     /**
