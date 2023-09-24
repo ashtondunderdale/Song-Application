@@ -13,6 +13,13 @@ import java.util.Scanner;
 
 public class SongApplication {
     
+    // constants for menu options, removes unessecary, unwanted "magic numbers"
+    private static final int EXIT_OPTION = 0;
+    private static final int ADD_SONG_OPTION = 1;
+    private static final int REMOVE_SONG_OPTION = 2;
+    private static final int VIEW_SONGS_OPTION = 3;
+    private static final int VIEW_TOP_SONGS_OPTION = 4;
+    
     // Scanner for user input
     static Scanner userInput = new Scanner(System.in);
     
@@ -26,7 +33,18 @@ public class SongApplication {
      * Process the user menu choice in a loop.
      */
     public static void processMenuChoice(){
-    
+        
+        while(true){
+            int menuChoice = getUserMenuChoice();
+            
+            switch (menuChoice) {
+                case ADD_SONG_OPTION -> addSong();
+                case REMOVE_SONG_OPTION -> removeSong();
+                case VIEW_SONGS_OPTION -> viewSongs();
+                case VIEW_TOP_SONGS_OPTION -> viewTopSongs();
+                case EXIT_OPTION -> exitApplication();
+            }
+        }
     }
 
      /**
@@ -35,7 +53,26 @@ public class SongApplication {
      * @return the valid menu choice.
      */  
     public static int getUserMenuChoice(){
-    
+        boolean validMenuChoice = false;
+        int menuChoice = 0;
+        
+        while(!validMenuChoice){
+            displayMenu();
+            
+            if (userInput.hasNextInt()){
+                menuChoice = userInput.nextInt();
+                userInput.nextLine();
+                
+                switch (menuChoice){
+                    case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION, VIEW_TOP_SONGS_OPTION, EXIT_OPTION -> validMenuChoice = true;
+                    default -> System.out.print("Invalid Choice. Please enter a valid menu option: (0 - 4)\n\n");         
+                }
+            } else{
+                System.out.println("Invalid Type. Please enter a valid number.\n");
+                userInput.nextLine();
+            }
+        }
+        return menuChoice;
     }
     
      /**
@@ -83,5 +120,14 @@ public class SongApplication {
      */   
     public static void viewTopSongs(){
     
+    }
+    
+    /**
+     * Exit the application 
+     */
+    public static void exitApplication(){
+        System.out.println("Thank you for using the song application. The Program will now close.");
+        userInput.close();
+        System.exit(0);
     }
 }
