@@ -22,14 +22,12 @@ public class SongApplication {
         processMenuChoice(); 
     }
     
-    
     /**
      * Process the user menu choice in a loop.
      */
     public static void processMenuChoice(){
     
     }
-    
 
      /**
      * Get the user menu choice and validate it
@@ -39,7 +37,6 @@ public class SongApplication {
     public static int getUserMenuChoice(){
     
     }
-    
     
      /**
      * Display the menu to the user
