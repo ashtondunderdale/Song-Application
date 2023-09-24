@@ -10,9 +10,19 @@
 
 package songapplication;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * This class defines constants to be used in the menu interface,
+ * initialises Scanner class and ArrayList to store song objects
+ * 
+ */
 public class SongApplication {
-    
+   
+    // ArrayList to store song objects
+    private static final List<Song> songs = new ArrayList<>();
+   
     // constants for menu options, removes unessecary, unwanted "magic numbers"
     private static final int EXIT_OPTION = 0;
     private static final int ADD_SONG_OPTION = 1;
@@ -23,11 +33,21 @@ public class SongApplication {
     // Scanner for user input
     static Scanner userInput = new Scanner(System.in);
     
+    
+    /**
+     * The entry point of the program. Initialises the list of songs,
+     * displays menu, calls initial method..
+     * 
+     * @param args (not used).
+     */
     public static void main(String[] args) {
+        
+        songs.add(new Song("Let It Happen", "Tame Impala", "4:16", 108998497));
         
         // calls initial method
         processMenuChoice(); 
     }
+    
     
     /**
      * Process the user menu choice in a loop.
@@ -47,6 +67,7 @@ public class SongApplication {
         }
     }
 
+    
      /**
      * Get the user menu choice and validate it
      * 
@@ -75,6 +96,7 @@ public class SongApplication {
         return menuChoice;
     }
     
+    
      /**
      * Display the menu to the user
      */
@@ -95,7 +117,7 @@ public class SongApplication {
      * Adds a chosen song, generates random playCount
      */   
     public static void addSong(){
-    
+        System.out.println("\tAdd Songs\n\nEnter the name of the song you would like to add.");
     }
     
     
@@ -103,7 +125,7 @@ public class SongApplication {
      * Removes a chosen song 
      */   
     public static void removeSong(){
-    
+        System.out.println("\tRemove Songs\n\nEnter the name of the song you would like to remove.");
     }
     
     
@@ -122,6 +144,7 @@ public class SongApplication {
     public static void viewTopSongs(){
         System.out.println("\tView Most Played Songs\n");
     }
+    
     
     /**
      * Exit the application 
