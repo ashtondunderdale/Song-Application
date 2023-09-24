@@ -129,8 +129,8 @@ public class SongApplication {
      */   
     public static void addSong(){
         System.out.println("\tAdd Songs\n\nEnter the name of the song you would like to add.");
-        
         String songName = userInput.nextLine();
+        
         System.out.println("\nEnter the Artist name for this song.");
         String artistName = userInput.nextLine();
         
@@ -141,8 +141,8 @@ public class SongApplication {
         Random rand = new Random();
         int playCount = rand.nextInt(1000000000); // upper bound: 1 billion
                 
-                songs.add(new Song(songName, artistName, durationString, playCount));
-                System.out.println("Press Enter to return to the menu.");
+        songs.add(new Song(songName, artistName, durationString, playCount));
+        System.out.println("Press Enter to return to the menu.");
     }   
     
     
@@ -151,6 +151,24 @@ public class SongApplication {
      */   
     public static void removeSong(){
         System.out.println("\tRemove Songs\n\nEnter the name of the song you would like to remove.");
+        
+        String songToRemove = userInput.nextLine();
+        List<Song> songsToRemove = new ArrayList<>(); // initialise a "removed songs" array for storing and then deletion
+        
+        for (Song song : songs){
+            if (song.songName.equals(songToRemove)){
+                songsToRemove.add(song);
+            }
+        }
+        
+        if (!songsToRemove.isEmpty()) { // if array is not empty, remove all items
+            songs.removeAll(songsToRemove);
+            System.out.println("\nThe Song " + songToRemove + " has been removed.\n");
+            userInput.nextLine();
+        } else{
+            System.out.println("\nThe song " + songToRemove + " could not be found.\n");
+            userInput.nextLine();
+        }
     }
     
     
