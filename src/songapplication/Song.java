@@ -8,6 +8,8 @@
  */
 
 package songapplication;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Represents a song with the associated attributes
@@ -33,3 +35,24 @@ public class Song {
         this.durationString = durationString;
         this.playCount = playCount;
     }
+    /**
+     * Formats the output of the songs to make it cleaner and more readable
+     * @return the formatted attributes of the objects
+     */
+    @Override
+    public String toString(){
+        int songNameWidth = 30;
+        int artistNameWidth = 30;
+        int durationWidth = 20;
+        int playCountWidth = 15;
+        
+        String formattedSongName = String.format("%-" + songNameWidth + "s", songName);
+        String formattedArtistName = String.format("%-" + artistNameWidth + "s", artistName);
+        String formattedDuration = String.format("%-" + durationWidth + "s", "Duration: " + durationString);
+        
+        String formattedPlayCount = NumberFormat.getNumberInstance(Locale.US).format(playCount);
+        formattedPlayCount = String.format("%-" + playCountWidth + "s", "Play Count: " + formattedPlayCount);
+        
+        return formattedSongName + formattedArtistName + formattedDuration + formattedPlayCount;
+    }
+}

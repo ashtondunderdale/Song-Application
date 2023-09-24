@@ -12,6 +12,7 @@ package songapplication;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 /**
  * This class defines constants to be used in the menu interface,
@@ -44,15 +45,15 @@ public class SongApplication {
         
         songs.add(new Song("Let It Happen", "Tame Impala", "4:16", 108998497));
         songs.add(new Song("Poker Face", "Lady Gaga", "3:34", 1210515591));
-        songs.add(new Song("Summertime Sadness", "Lana Del Ray", "4:26", 487585745));
-        songs.add(new Song("The Less I Know The Better", "TameImpala", "3:37", 157449061));
+        songs.add(new Song("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
+        songs.add(new Song("The Less I Know The Better", "TameImpala", "3:37", 557449061));
         songs.add(new Song("Bohemian Rhapsody", "Queen", "5:55", 758473934));
         songs.add(new Song("Rolling in the Deep", "Adele", "3:38", 123955524));
         songs.add(new Song("Billie Jean", "Micheal  Jackson", "4:54", 98746375));
-        songs.add(new Song("Stairway to Heaven", "Led Zeppelin", "8:02", 129483942));
-        songs.add(new Song("Shape of You", "Ed Sheeran", "3:353", 98642142));
-        songs.add(new Song("Uptown Funk", "Mark Ronson ft. Bruno Mars", "4:31", 103454389));
-
+        songs.add(new Song("Stairway to Heaven", "Led Zeppelin", "8:02", 429483942));
+        songs.add(new Song("Shape of You", "Ed Sheeran", "3:353", 77642142));
+        songs.add(new Song("Uptown Funk", "Mark Ronson ft. Bruno Mars", "4:31", 223454389));
+        
         // calls initial method
         processMenuChoice(); 
     }
@@ -162,6 +163,23 @@ public class SongApplication {
      */   
     public static void viewTopSongs(){
         System.out.println("\tView Most Played Songs\n");
+        
+        int topSongCounter = 0;
+        int songCounterLength = 3;
+        
+        List<Song> sortedSongs = new ArrayList<>(songs);
+        Collections.sort(sortedSongs, (Song song1, Song song2) -> Integer.compare(song2.playCount, song1.playCount));
+        
+        for (Song song : sortedSongs) {
+            topSongCounter++;
+            String formattedCounter = String.format("%-" + songCounterLength + "s", + topSongCounter);
+            System.out.println(formattedCounter + song);
+            if (topSongCounter >= 10){
+                break;
+            }
+        }
+        System.out.println("Press Enter to return to the menu.");
+        userInput.nextLine();
     }
     
     
