@@ -1,7 +1,7 @@
 /**
  * songApplicationGui.java
  * 
- * This file contains the main class for the GUI song application.
+ * This file contains the main class for the GUI song application
  * 
  * @author Ashton Dunderdale
  * Date: September 26, 2023 
