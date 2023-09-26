@@ -10,9 +10,9 @@
 
 package songapplicationgui;
 
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
-import java.awt.Color;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
 
 public class SongApplicationGui {
 
@@ -29,6 +29,32 @@ public class SongApplicationGui {
         frame.setIconImage(image.getImage()); // do not work.. for some reason.
         
         frame.getContentPane().setBackground(new Color(50,50,50)); // background colour
+        
+        JMenuBar menuBar = new JMenuBar();
+        
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem addSongButton = new JMenuItem("Add Song");
+        JMenuItem removeSongButton = new JMenuItem("Remove Song");
+        fileMenu.add(addSongButton);
+        fileMenu.add(removeSongButton);
+        
+        JMenu viewMenu = new JMenu("View");
+        JMenuItem viewSongsButton = new JMenuItem("View Songs");
+        JMenuItem viewTopSongsButton = new JMenuItem("View Top Songs");
+        viewMenu.add(viewSongsButton);
+        viewMenu.add(viewTopSongsButton);
+        
+        JMenu aboutMenu = new JMenu("About");
+        JMenuItem helpButton = new JMenuItem("Help");
+        JMenuItem guideButton = new JMenuItem("Application Guide");
+        aboutMenu.add(helpButton);
+        aboutMenu.add(guideButton);
+        
+        menuBar.add(fileMenu);
+        menuBar.add(viewMenu);
+        menuBar.add(aboutMenu);
+        
+        frame.setJMenuBar(menuBar);
         
         frame.setVisible(true);
         
