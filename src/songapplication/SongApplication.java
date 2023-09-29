@@ -33,7 +33,6 @@ public class SongApplication {
     private static final int VIEW_SONGS_OPTION = 3;
     private static final int VIEW_TOP_SONGS_OPTION = 4;
     
-    // Scanner for user input
     static Scanner userInput = new Scanner(System.in);
     
     
@@ -135,13 +134,15 @@ public class SongApplication {
         System.out.println("\nEnter the Artist name for this song.");
         String artistName = userInput.nextLine();
         
-        System.out.println("\nEnter the Duration of the song in this format: 2:15");
-        String durationString = userInput.nextLine();
-        
         // initialise random class
         Random rand = new Random();
         int playCount = rand.nextInt(1000000000); // upper bound: 1 billion
-                
+        
+        int durationSeconds = rand.nextInt(60);
+        int durationMinutes = rand.nextInt(7);
+        
+        String durationString = (durationMinutes + ":" + durationSeconds);
+        
         songs.add(new Song(songName, artistName, durationString, playCount));
         System.out.println(returnToMenuStatement());
     }   
