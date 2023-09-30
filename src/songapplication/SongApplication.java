@@ -32,6 +32,8 @@ public class SongApplication {
     private static final int REMOVE_SONG_OPTION = 2;
     private static final int VIEW_SONGS_OPTION = 3;
     private static final int VIEW_TOP_SONGS_OPTION = 4;
+    private static final int SEARCH_SONGS_OPTION = 5;
+
     
     static Scanner userInput = new Scanner(System.in);
     
@@ -74,6 +76,7 @@ public class SongApplication {
                 case VIEW_SONGS_OPTION -> viewSongs();
                 case VIEW_TOP_SONGS_OPTION -> viewTopSongs();
                 case EXIT_OPTION -> exitApplication();
+                case SEARCH_SONGS_OPTION -> searchSongs();
             }
         }
     }
@@ -96,7 +99,7 @@ public class SongApplication {
                 userInput.nextLine();
                 
                 switch (menuChoice){
-                    case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION, VIEW_TOP_SONGS_OPTION, EXIT_OPTION -> validMenuChoice = true;
+                    case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION, VIEW_TOP_SONGS_OPTION, SEARCH_SONGS_OPTION, EXIT_OPTION -> validMenuChoice = true;
                     default -> System.out.print("Invalid Choice. Please enter a valid menu option: (0 - 4)\n\n");         
                 }
             } else{
@@ -118,7 +121,8 @@ public class SongApplication {
                    \t1. Add Song
                    \t2. Remove Song
                    \t3. View Songs
-                   \t4. View Top Songs
+                   \t4. View Top Songs\n
+                   \t5. Search Songs
                    \n\t0. Exit Application
                    """);
     }
@@ -223,6 +227,37 @@ public class SongApplication {
         userInput.nextLine();
     }
     
+    /**
+     * Looks for keywords in songs and returns matches based on user input
+     */    
+    public static void searchSongs(){
+        returnEmptySongStatement();
+        
+        System.out.println("\tSearch...\n\nPlease enter a search query:\n\n");   
+        
+        int songCounter = 0;
+        int songCounterLength = 4;
+        int matchesFound = 0;
+        
+        String searchQuery = userInput.nextLine();
+        
+        // iterate through songs with query in mind
+        for (Song song : songs) {
+            songCounter++;
+            String formattedCounter = String.format("%-" + songCounterLength + "s", songCounter);
+            
+            if (song.songName.toLowerCase().contains(searchQuery.toLowerCase()) || song.artistName.toLowerCase().contains(searchQuery.toLowerCase())){
+                matchesFound++;
+                System.out.println(formattedCounter + song);
+            } 
+        }
+        if (matchesFound == 0){
+            System.out.println("A song or artist could not be found with that query..");
+            }
+        
+        System.out.println(returnToMenuStatement());
+        userInput.nextLine();
+    }
     
     /**
      * Exit the application 
