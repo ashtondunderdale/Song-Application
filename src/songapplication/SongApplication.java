@@ -311,7 +311,9 @@ public class SongApplication {
         System.out.println("Enter the name of the song you would like to play\n");   
 
         String playQuery = userInput.nextLine();
-        String filePath = playQuery + ".wav";
+        
+        String folderName = "songs";
+        String filePath = folderName + "/" + playQuery + ".wav";
         
         playAudio(filePath);
     }
@@ -333,6 +335,7 @@ public class SongApplication {
                 clip.open(audioInput);
                 clip.start();
                 
+                filePath = filePath.replaceFirst("songs/", "");
                 filePath = filePath.substring(0, filePath.lastIndexOf('.'));
                 System.out.println("Playing " + filePath + "..\n\nPress the Enter key to stop the song and return to menu.");   
                 userInput.nextLine();
