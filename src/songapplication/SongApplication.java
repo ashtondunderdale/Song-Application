@@ -1,7 +1,7 @@
 /**
- * SongApplicationJava.java
+ * SongApplication.java
  * 
- * This file contains the main class for the song application.
+ * This file contains the main class for the song application
  * 
  * @author Ashton Dunderdale
  * Date: September 30, 2023 
