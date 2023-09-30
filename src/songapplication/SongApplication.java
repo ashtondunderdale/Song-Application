@@ -4,7 +4,7 @@
  * This file contains the main class for the song application.
  * 
  * @author Ashton Dunderdale
- * Date: September 24, 2023 
+ * Date: September 30, 2023 
  * 
  */
 
@@ -16,6 +16,16 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Random;
 
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JOptionPane;
+
+
 /**
  * This class defines constants to be used in the menu interface,
  * initialises Scanner class and ArrayList to store song objects
@@ -25,6 +35,7 @@ public class SongApplication {
    
     // ArrayList to store song objects
     private static final List<Song> songs = new ArrayList<>();
+    private static final List<String> searchHistory = new ArrayList<>();
    
     // constants for menu options, removes unessecary, unwanted "magic numbers"
     private static final int EXIT_OPTION = 0;
@@ -33,9 +44,13 @@ public class SongApplication {
     private static final int VIEW_SONGS_OPTION = 3;
     private static final int VIEW_TOP_SONGS_OPTION = 4;
     private static final int SEARCH_SONGS_OPTION = 5;
+    private static final int VIEW_SEARCH_HISTORY_OPTION = 6;
+    private static final int PLAY_SONG_OPTION = 7;
 
-    
     static Scanner userInput = new Scanner(System.in);
+    
+    private static boolean isSongPlaying = false;
+
     
     
     /**
@@ -47,15 +62,15 @@ public class SongApplication {
     public static void main(String[] args){
         
         songs.add(new Song("Let It Happen", "Tame Impala", "4:16", 108998497));
-        songs.add(new Song("Poker Face", "Lady Gaga", "3:34", 1210515591));
+        songs.add(new Song("Bad Romance", "Lady Gaga", "3:34", 1210515591));
         songs.add(new Song("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
-        songs.add(new Song("The Less I Know The Better", "TameImpala", "3:37", 557449061));
-        songs.add(new Song("Bohemian Rhapsody", "Queen", "5:55", 758473934));
-        songs.add(new Song("Rolling in the Deep", "Adele", "3:38", 123955524));
-        songs.add(new Song("Billie Jean", "Micheal  Jackson", "4:54", 98746375));
-        songs.add(new Song("Stairway to Heaven", "Led Zeppelin", "8:02", 429483942));
-        songs.add(new Song("Shape of You", "Ed Sheeran", "3:35", 77642142));
-        songs.add(new Song("Uptown Funk", "Mark Ronson ft. Bruno Mars", "4:31", 223454389));
+        songs.add(new Song("The Less I Know The Better", "Tame Impala", "3:37", 557449061));
+        songs.add(new Song("Smells Like Teen Spirit", "Nirvana", "5:55", 758473934));
+        songs.add(new Song("Poker Face", "Lady Gaga", "3:38", 123955524));
+        songs.add(new Song("Tribute", "Tenacious D", "4:52", 98746375));
+        songs.add(new Song("Be Quiet And Drive", "Deftones", "8:02", 429483942));
+        songs.add(new Song("Everlong", "Foo Fighters", "3:35", 77642142));
+        songs.add(new Song("Change", "Deftones", "4:31", 223454389));
         
         // calls initial method
         processMenuChoice(); 
@@ -77,6 +92,8 @@ public class SongApplication {
                 case VIEW_TOP_SONGS_OPTION -> viewTopSongs();
                 case EXIT_OPTION -> exitApplication();
                 case SEARCH_SONGS_OPTION -> searchSongs();
+                case VIEW_SEARCH_HISTORY_OPTION -> viewSearchHistory();
+                case PLAY_SONG_OPTION -> playSong();
             }
         }
     }
@@ -99,7 +116,7 @@ public class SongApplication {
                 userInput.nextLine();
                 
                 switch (menuChoice){
-                    case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION, VIEW_TOP_SONGS_OPTION, SEARCH_SONGS_OPTION, EXIT_OPTION -> validMenuChoice = true;
+                    case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION, VIEW_TOP_SONGS_OPTION, SEARCH_SONGS_OPTION, VIEW_SEARCH_HISTORY_OPTION, PLAY_SONG_OPTION, EXIT_OPTION -> validMenuChoice = true;
                     default -> System.out.print("Invalid Choice. Please enter a valid menu option: (0 - 4)\n\n");         
                 }
             } else{
@@ -123,6 +140,8 @@ public class SongApplication {
                    \t3. View Songs
                    \t4. View Top Songs\n
                    \t5. Search Songs
+                   \t6. Search History\n
+                   \t7. Music Player
                    \n\t0. Exit Application
                    """);
     }
@@ -240,6 +259,7 @@ public class SongApplication {
         int matchesFound = 0;
         
         String searchQuery = userInput.nextLine();
+        searchHistory.add(searchQuery);
         
         // iterate through songs with query in mind
         for (Song song : songs) {
@@ -257,6 +277,76 @@ public class SongApplication {
         
         System.out.println(returnToMenuStatement());
         userInput.nextLine();
+    }
+  
+    
+    /**
+     * Iterates through searchHistory ArrayList, outputs all
+     */
+    public static void viewSearchHistory(){
+        
+        System.out.println("\tView Search History\n\nHistory:\n");
+        
+        if (searchHistory.isEmpty()){
+            System.out.println("Your Search History is empty.\n" + returnToMenuStatement());
+            userInput.nextLine();
+            processMenuChoice();        
+        }
+        
+        for (String query : searchHistory) {
+            System.out.println("  " + query);
+        }
+        System.out.println(returnToMenuStatement());
+        userInput.nextLine();
+    }    
+    
+    /**
+     * Gets the name of the song to play from user and locates in file location
+     */
+    
+    public static void playSong(){
+        returnEmptySongStatement();
+        
+        System.out.println("\tMusic Player\n");   
+        System.out.println("Enter the name of the song you would like to play\n");   
+
+        String playQuery = userInput.nextLine();
+        String filePath = playQuery + ".wav";
+        
+        playAudio(filePath);
+    }
+    
+    
+    /**
+     * Plays the selected song from the previous method, performs validation checks
+     * @param filePath
+     */    
+    public static void playAudio(String filePath){
+        
+        try{
+            File musicPath = new File(filePath);
+            
+            if(musicPath.exists()){
+                
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInput);
+                clip.start();
+                
+                filePath = filePath.substring(0, filePath.lastIndexOf('.'));
+                System.out.println("Playing " + filePath + "..\n\nPress the Enter key to stop the song and return to menu.");   
+                userInput.nextLine();
+                
+                clip.stop();
+            } else { 
+                System.out.println("This song does not exist. Did you spell it correctly?");
+                System.out.println(returnToMenuStatement());
+                userInput.nextLine();
+            }
+        }
+        catch (IOException | LineUnavailableException | UnsupportedAudioFileException e){
+            System.out.println(e);
+        }
     }
     
     /**
