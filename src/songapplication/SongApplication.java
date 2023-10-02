@@ -45,7 +45,7 @@ public class SongApplication
     private static final int VIEW_TOP_SONGS_OPTION = 4;
     private static final int SEARCH_SONGS_OPTION = 5;
     private static final int VIEW_SEARCH_HISTORY_OPTION = 6;
-    private static final int PLAY_SONG_OPTION = 7;
+    private static final int MUSIC_PLAYER_OPTION = 7;
     
     private static final String RETURN_TO_MENU_STRING = "\nPress the enter key to return to the menu";
     private static final String EXIT_MESSAGE = 
@@ -99,7 +99,7 @@ public class SongApplication
                 case EXIT_OPTION -> ExitApplication();
                 case SEARCH_SONGS_OPTION -> SearchSongs();
                 case VIEW_SEARCH_HISTORY_OPTION -> ViewSearchHistory();
-                case PLAY_SONG_OPTION -> PlaySong();
+                case MUSIC_PLAYER_OPTION -> SelectSong();
             }
         }
     }
@@ -128,7 +128,7 @@ public class SongApplication
                 {
                     case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION,
                             VIEW_TOP_SONGS_OPTION, SEARCH_SONGS_OPTION, 
-                            VIEW_SEARCH_HISTORY_OPTION, PLAY_SONG_OPTION, 
+                            VIEW_SEARCH_HISTORY_OPTION, MUSIC_PLAYER_OPTION, 
                             EXIT_OPTION -> validMenuChoice = true;
                             
                     default -> System.out.print("Invalid Choice. Please enter a valid menu option: (0 - 4)\n\n");         
@@ -363,10 +363,10 @@ public class SongApplication
     
     
     /**
-     * Gets the name of the song to play from user and locates in file location
+     * Gets the name of the song to play from user and creates a File object to pass as a parameter
      * calls PlayAudio passing filePath as a parameter
      */
-    private static void PlaySong()
+    private static void SelectSong()
     {
         ReturnEmptySongStatement();
         
@@ -378,37 +378,26 @@ public class SongApplication
         String folderName = "songs";
         String filePath = folderName + "/" + playQuery + ".wav";
         
-        PlayAudio(filePath);
+        GetSong(filePath);
     }
     
     
     /**
-     * Checks that the file path exists and validates user song choice
-     * Plays the selected song from the previous method
+     * Checks that the file path exists inside a try / except and validates user song choice
+     * Handles the relevant exceptions, unsupported file type, etc
+     * 
+     * If all valid it will call playSong with the parameters below
      * @param filePath
      */    
-    private static void PlayAudio(String filePath) // refactor this method - too big, maybe separate validation from playing the actual audio
+    private static void GetSong(String filePath)
     {
-        
         try
         {
             File musicPath = new File(filePath);
             
             if(musicPath.exists())
             {
-                
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioInput);
-                clip.start();
-                
-                filePath = filePath.replaceFirst("songs/", "");
-                filePath = filePath.substring(0, filePath.lastIndexOf('.'));
-                System.out.println("Playing " + filePath +
-                        "..\n\nPress the Enter key to stop the song and return to menu.");   
-                userInput.nextLine();
-                
-                clip.stop();
+                playSong(musicPath, filePath);
             } 
             
             else 
@@ -419,10 +408,36 @@ public class SongApplication
             }
         }
         
-        catch (IOException | LineUnavailableException | UnsupportedAudioFileException e)
+        catch (UnsupportedAudioFileException | IOException | LineUnavailableException e)
         {
             System.out.println(e);
         }
+    }
+    
+    
+    /**
+     * Plays the selected song from the previous method
+     * Prompts the user to press enter when they would like to stop the song
+     * Throws some common exceptions that may be thrown when dealing with file types, etc
+     * 
+     * @param musicPath
+     * @param filePath
+     */    
+    private static void playSong(File musicPath, String filePath) 
+            throws UnsupportedAudioFileException, IOException, LineUnavailableException
+    {
+        AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioInput);
+        clip.start();
+
+        filePath = filePath.replaceFirst("songs/", "");
+        filePath = filePath.substring(0, filePath.lastIndexOf('.'));
+        System.out.println("Playing " + filePath +
+                "..\n\nPress the Enter key to stop the song and return to menu.");   
+        userInput.nextLine();
+
+        clip.stop();
     }
     
     
