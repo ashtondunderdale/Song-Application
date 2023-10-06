@@ -7,10 +7,12 @@
  * Date: September 24, 2023
  */
 
+
 package songapplication;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+
 
 /**
  * Represents a song with the associated attributes
@@ -36,6 +38,8 @@ public class Song {
         this.durationString = durationString;
         this.playCount = playCount;
     }
+    
+    
     /**
      * Formats the output of the songs to make it cleaner and more readable
      * @return the formatted attributes of the objects
