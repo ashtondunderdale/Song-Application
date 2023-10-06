@@ -2,6 +2,7 @@
  * SongApplication.java
  * 
  * This file contains the main class for the song application
+ * Other Files: Song.Java
  * 
  * @author Ashton Dunderdale
  * Date: October 6, 2023 
@@ -74,35 +75,26 @@ public class SongApplication
      */
     public static void main(String[] args)
     { 
-        songs.add(new Song
-        ("Let It Happen", "Tame Impala", "4:16", 108998497));
-        
-        songs.add(new Song
-        ("Bad Romance", "Lady Gaga", "3:34", 1210515591));
-        
-        songs.add(new Song
-        ("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
-        
-        songs.add(new Song
-        ("The Less I Know The Better", "Tame Impala", "3:37", 557449061));
-        
-        songs.add(new Song
-        ("Smells Like Teen Spirit", "Nirvana", "5:55", 758473934));
-        
-        songs.add(new Song
-        ("Poker Face", "Lady Gaga", "3:38", 123955524));
-        
-        songs.add(new Song
-        ("Tribute", "Tenacious D", "4:52", 98746375));
-        
-        songs.add(new Song
-        ("Be Quiet And Drive", "Deftones", "8:02", 429483942));
-        
-        songs.add(new Song
-        ("Everlong", "Foo Fighters", "3:35", 77642142));
-        
-        songs.add(new Song
-        ("Change", "Deftones", "4:31", 223454389));
+//        songs.add(new Song
+//        ("Let It Happen", "Tame Impala", "4:16", 108998497));
+//        songs.add(new Song
+//        ("Bad Romance", "Lady Gaga", "3:34", 1210515591));
+//        songs.add(new Song
+//        ("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
+//        songs.add(new Song
+//        ("The Less I Know The Better", "Tame Impala", "3:37", 557449061));
+//        songs.add(new Song
+//        ("Smells Like Teen Spirit", "Nirvana", "5:55", 758473934));
+//        songs.add(new Song
+//        ("Poker Face", "Lady Gaga", "3:38", 123955524));
+//        songs.add(new Song
+//        ("Tribute", "Tenacious D", "4:52", 98746375));
+//        songs.add(new Song
+//        ("Be Quiet And Drive", "Deftones", "8:02", 429483942));
+//        songs.add(new Song
+//        ("Everlong", "Foo Fighters", "3:35", 77642142));
+//        songs.add(new Song
+//        ("Change", "Deftones", "4:31", 223454389));
         
         // calls initial program starter method
         ProcessMenuChoice(); 
