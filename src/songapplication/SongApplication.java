@@ -5,7 +5,7 @@
  * Other Files: Song.Java
  * 
  * @author Ashton Dunderdale
- * Date: October 6, 2023 
+ * Date: October 17, 2023 
  */
 
 
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 import java.util.Random;
-
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioInputStream;
@@ -75,26 +74,26 @@ public class SongApplication
      */
     public static void main(String[] args)
     { 
-//        songs.add(new Song
-//        ("Let It Happen", "Tame Impala", "4:16", 108998497));
-//        songs.add(new Song
-//        ("Bad Romance", "Lady Gaga", "3:34", 1210515591));
-//        songs.add(new Song
-//        ("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
-//        songs.add(new Song
-//        ("The Less I Know The Better", "Tame Impala", "3:37", 557449061));
-//        songs.add(new Song
-//        ("Smells Like Teen Spirit", "Nirvana", "5:55", 758473934));
-//        songs.add(new Song
-//        ("Poker Face", "Lady Gaga", "3:38", 123955524));
-//        songs.add(new Song
-//        ("Tribute", "Tenacious D", "4:52", 98746375));
-//        songs.add(new Song
-//        ("Be Quiet And Drive", "Deftones", "8:02", 429483942));
-//        songs.add(new Song
-//        ("Everlong", "Foo Fighters", "3:35", 77642142));
-//        songs.add(new Song
-//        ("Change", "Deftones", "4:31", 223454389));
+        songs.add(new Song
+        ("Let It Happen", "Tame Impala", "4:16", 108998497));
+        songs.add(new Song
+        ("Bad Romance", "Lady Gaga", "3:34", 1210515591));
+        songs.add(new Song
+        ("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
+        songs.add(new Song
+        ("The Less I Know The Better", "Tame Impala", "3:37", 557449061));
+        songs.add(new Song
+        ("Smells Like Teen Spirit", "Nirvana", "5:55", 758473934));
+        songs.add(new Song
+        ("Poker Face", "Lady Gaga", "3:38", 123955524));
+        songs.add(new Song
+        ("Tribute", "Tenacious D", "4:52", 98746375));
+        songs.add(new Song
+        ("Be Quiet And Drive", "Deftones", "8:02", 429483942));
+        songs.add(new Song
+        ("Everlong", "Foo Fighters", "3:35", 77642142));
+        songs.add(new Song
+        ("Change", "Deftones", "4:31", 223454389));
         
         // calls initial program starter method
         ProcessMenuChoice(); 
@@ -115,11 +114,11 @@ public class SongApplication
                 case ADD_SONG_OPTION -> AddSong();
                 case REMOVE_SONG_OPTION -> RemoveSong();
                 case VIEW_SONGS_OPTION -> ViewSongs();
-                case VIEW_TOP_SONGS_OPTION -> ViewTopSongs();
+                case VIEW_TOP_SONGS_OPTION -> ViewTopSongs();             
                 case SEARCH_SONGS_OPTION -> SearchSongs();
                 case VIEW_SEARCH_HISTORY_OPTION -> ViewSearchHistory();
                 case MUSIC_PLAYER_OPTION -> SelectSong();
-                case PLAY_RANDOM_SONG_OPTION -> playRandomSong();
+                case PLAY_RANDOM_SONG_OPTION -> playRandomSong();               
                 case EXIT_OPTION -> ExitApplication();
             }
         }
@@ -147,14 +146,18 @@ public class SongApplication
                 
                 switch (menuChoice)
                 {
-                    case ADD_SONG_OPTION, REMOVE_SONG_OPTION, VIEW_SONGS_OPTION,
-                            VIEW_TOP_SONGS_OPTION, SEARCH_SONGS_OPTION, 
-                            VIEW_SEARCH_HISTORY_OPTION, MUSIC_PLAYER_OPTION,
-                            PLAY_RANDOM_SONG_OPTION, EXIT_OPTION -> 
-                                validMenuChoice = true;
+                    case ADD_SONG_OPTION, 
+                            REMOVE_SONG_OPTION, 
+                            VIEW_SONGS_OPTION,
+                            VIEW_TOP_SONGS_OPTION, 
+                            SEARCH_SONGS_OPTION, 
+                            VIEW_SEARCH_HISTORY_OPTION, 
+                            MUSIC_PLAYER_OPTION,
+                            PLAY_RANDOM_SONG_OPTION, 
+                            EXIT_OPTION -> validMenuChoice = true;
                             
                     default -> System.out.print("""
-                        Invalid Choice. Please enter a valid menu option: (0 - 8)
+                        Invalid Choice. Enter a valid menu option: (0 - 8)
                                                 """);         
                 }
             } 
@@ -209,8 +212,7 @@ public class SongApplication
         System.out.println("\nEnter the Artist name for this song.");
         String artistName = userInput.nextLine(); // add a length limit
         
-        int playCount = rand.nextInt(1000000000);
-        
+        int playCount = rand.nextInt(1000000000);       
         int durationSeconds = rand.nextInt(60);
         int durationMinutes = rand.nextInt(7);
         
@@ -218,6 +220,7 @@ public class SongApplication
         
         songs.add(new Song(songName, artistName, durationString, playCount));
         System.out.println("A new song has been added.");
+        
         System.out.println(ReturnToMenuStatement());
         userInput.nextLine();
     }   
@@ -312,7 +315,7 @@ public class SongApplication
         List<Song> sortedSongs = new ArrayList<>(songs);
         
         Collections.sort(sortedSongs, (Song song1, Song song2) 
-                -> Integer.compare(song2.playCount, song1.playCount));
+            -> Integer.compare(song2.playCount, song1.playCount));
         
         for (Song song : sortedSongs)
         {
@@ -358,7 +361,8 @@ public class SongApplication
                     songCounterLength + "s", songCounter);
             
             if (song.songName.toLowerCase().contains(searchQuery.toLowerCase()) 
-                    || song.artistName.toLowerCase().contains(searchQuery.toLowerCase())){
+                    || song.artistName.toLowerCase().contains(searchQuery.toLowerCase()))
+            {
                 matchesFound++;
                 System.out.println(formattedCounter + song);
             } 
@@ -368,8 +372,7 @@ public class SongApplication
         {
             System.out.println(""
                 + "A song or artist could not be found with that query..");
-        }
-        
+        }        
         System.out.println(ReturnToMenuStatement());
         userInput.nextLine();
     }
@@ -513,7 +516,7 @@ public class SongApplication
     {
         System.out.println(EXIT_MESSAGE);
         userInput.close();
-        System.exit(0); // exit some other way more graceful
+        System.exit(0);
     }    
 
     
