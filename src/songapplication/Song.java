@@ -2,7 +2,7 @@
  * Song.java
  *
  * This file contains the Song class for the song application.
- * Other Files: SongApplication.java
+ * Other Files: SongApplication.java, Playlist,java
  *
  * @author Ashton Dunderdale
  * Date: September 24, 2023

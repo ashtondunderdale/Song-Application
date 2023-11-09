@@ -2,7 +2,7 @@
  * SongApplication.java
  * 
  * This file contains the main class for the song application
- * Other Files: Song.Java
+ * Other Files: Song.Java, Playlist.java
  * 
  * @author Ashton Dunderdale
  * Date: October 17, 2023 
@@ -36,8 +36,10 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class SongApplication 
 {  
     // ArrayList to store song objects
-    private static final List<Song> songs = new ArrayList<>();
     private static final List<String> searchHistory = new ArrayList<>();
+    
+    private static final List<Song> songs = new ArrayList<>();   
+    private static final List<Playlist> playlists = new ArrayList<>();
    
     /* constants for menu options and message methods, removes unessecary, 
      * unwanted "magic numbers"
@@ -45,12 +47,15 @@ public class SongApplication
     private static final int EXIT_OPTION = 0;
     private static final int ADD_SONG_OPTION = 1;
     private static final int REMOVE_SONG_OPTION = 2;
-    private static final int VIEW_SONGS_OPTION = 3;
-    private static final int VIEW_TOP_SONGS_OPTION = 4;
-    private static final int SEARCH_SONGS_OPTION = 5;
-    private static final int VIEW_SEARCH_HISTORY_OPTION = 6;
-    private static final int MUSIC_PLAYER_OPTION = 7;
-    private static final int PLAY_RANDOM_SONG_OPTION = 8;
+    private static final int ADD_PLAYLIST_OPTION = 3;
+    private static final int REMOVE_PLAYLIST_OPTION = 4;
+    private static final int VIEW_SONGS_OPTION = 5;
+    private static final int VIEW_TOP_SONGS_OPTION = 6;
+    private static final int SEARCH_SONGS_OPTION = 7;
+    private static final int VIEW_SEARCH_HISTORY_OPTION = 8;
+    private static final int MUSIC_PLAYER_OPTION = 9;
+    private static final int PLAY_RANDOM_SONG_OPTION = 10;
+    
     
     private static final String RETURN_TO_MENU_STRING = 
             "\nPress the enter key to return to the menu";
@@ -77,7 +82,7 @@ public class SongApplication
         songs.add(new Song
         ("Let It Happen", "Tame Impala", "4:16", 108998497));
         songs.add(new Song
-        ("Bad Romance", "Lady Gaga", "3:34", 1210515591));
+        ("Bad Romance", "Lady Gaga", "3:34", 1210515591)); 
         songs.add(new Song
         ("Summertime Sadness", "Lana Del Ray", "4:26", 687585745));
         songs.add(new Song
@@ -85,7 +90,7 @@ public class SongApplication
         songs.add(new Song
         ("Smells Like Teen Spirit", "Nirvana", "5:55", 758473934));
         songs.add(new Song
-        ("Poker Face", "Lady Gaga", "3:38", 123955524));
+        ("Poker Face", "Lady Gaga", "3:38", 123955524)); // this is the only one that has an audio file
         songs.add(new Song
         ("Tribute", "Tenacious D", "4:52", 98746375));
         songs.add(new Song
@@ -94,6 +99,9 @@ public class SongApplication
         ("Everlong", "Foo Fighters", "3:35", 77642142));
         songs.add(new Song
         ("Change", "Deftones", "4:31", 223454389));
+               
+        Playlist initialPlaylist = new Playlist(songs, "initialPlaylist");
+        playlists.add(initialPlaylist);
         
         // calls initial program starter method
         ProcessMenuChoice(); 
@@ -113,6 +121,8 @@ public class SongApplication
             {
                 case ADD_SONG_OPTION -> AddSong();
                 case REMOVE_SONG_OPTION -> RemoveSong();
+                case ADD_PLAYLIST_OPTION -> AddPlaylist();
+                case REMOVE_PLAYLIST_OPTION -> RemovePlaylist();
                 case VIEW_SONGS_OPTION -> ViewSongs();
                 case VIEW_TOP_SONGS_OPTION -> ViewTopSongs();             
                 case SEARCH_SONGS_OPTION -> SearchSongs();
@@ -148,6 +158,8 @@ public class SongApplication
                 {
                     case ADD_SONG_OPTION, 
                             REMOVE_SONG_OPTION, 
+                            ADD_PLAYLIST_OPTION,
+                            REMOVE_PLAYLIST_OPTION,
                             VIEW_SONGS_OPTION,
                             VIEW_TOP_SONGS_OPTION, 
                             SEARCH_SONGS_OPTION, 
@@ -179,16 +191,15 @@ public class SongApplication
     { 
         System.out.println("""
                    \tMusic Player\n
-                   Choose a menu option:\n
-                   \t1. Add Song
-                   \t2. Remove Song
-                   \t3. View Songs
-                   \t4. View Top Songs\n
-                   \t5. Search Songs
-                   \t6. Search History\n
-                   \t7. Music Player
-                   \t8. Play Random Song
-                   \n\t0. Exit Application
+                   Select a Menu Option by Entering a Number: 
+                   \t___________________________________________
+                   \t1  | Add Song           2  | Remove Song
+                   \t3  | Add Playlist       4  | Remove Playlist
+                   \t5  | View Songs         6  | View Top Songs\n
+                   \t7  | Search Songs       8  | Search History\n
+                   \t9  | Music Player       10 | Play Random Song
+                   
+                   \t0 | Exit Application |
                    """);
     }
     
@@ -213,13 +224,15 @@ public class SongApplication
         String artistName = userInput.nextLine(); // add a length limit
         
         int playCount = rand.nextInt(1000000000);       
-        int durationSeconds = rand.nextInt(60);
+        int durationSeconds = rand.nextInt(10, 60);
         int durationMinutes = rand.nextInt(7);
         
         String durationString = (durationMinutes + ":" + durationSeconds);
         
-        songs.add(new Song(songName, artistName, durationString, playCount));
-        System.out.println("A new song has been added.");
+        Playlist selectedPlaylist = ChoosePlaylist();
+       
+        selectedPlaylist.AddSong(new Song(songName, artistName, durationString, playCount));
+        System.out.println("\n" + songName + " by " + artistName + " has been added to " + selectedPlaylist.name);
         
         System.out.println(ReturnToMenuStatement());
         userInput.nextLine();
@@ -245,9 +258,11 @@ public class SongApplication
             Enter the name of the song you would like to remove.""");
         
         String songToRemove = userInput.nextLine();
-        List<Song> songsToRemove = new ArrayList<>(); 
         
-        for (Song song : songs)
+        Playlist selectedPlaylist = ChoosePlaylist();
+        
+        List<Song> songsToRemove = new ArrayList<>();         
+        for (Song song : selectedPlaylist.GetSongs())
         {
             if (song.songName.equals(songToRemove))
             {
@@ -257,16 +272,17 @@ public class SongApplication
         
         if (!songsToRemove.isEmpty())
         { 
-            songs.removeAll(songsToRemove);
+            selectedPlaylist.RemoveSongs(songsToRemove);
             System.out.println("\nThe Song " + songToRemove +
-                    " has been removed.\n" + ReturnToMenuStatement());
+                    " has been removed from" + selectedPlaylist.name + "\n" + ReturnToMenuStatement());
             userInput.nextLine();
         } 
         
         else
         {
             System.out.println("\nThe song " + songToRemove +
-                    " could not be found.\n" + ReturnToMenuStatement());
+                    " could not be found in the playlist" + 
+                    selectedPlaylist.name + "\n" + ReturnToMenuStatement());
             userInput.nextLine();
         }
     }
@@ -280,22 +296,129 @@ public class SongApplication
     {
         ReturnEmptySongStatement();
                 
-        System.out.println("\tView Songs\n");
+        System.out.println("\tView Songs\n"); 
         
-        int songCounter = 0;
-        int songCounterLength = 4;
-        
-        for (Song song : songs)
+        if(playlists.isEmpty())
         {
-            songCounter++;
-            String formattedCounter = String.format("%-" + 
+            System.out.println("No playlists available.");
+        } 
+        else
+        {
+            System.out.println("Choose a playlist to view songs\n");
+
+            for (int i = 0; i < playlists.size(); i++) 
+            {
+                System.out.println((i + 1) + " | " + playlists.get(i).name);
+            }
+            int playlistChoice = userInput.nextInt();
+            userInput.nextLine();
+
+            if(playlistChoice >= 1 && playlistChoice <= playlists.size()){
+                Playlist selectedPlaylist = playlists.get(playlistChoice - 1);
+
+            int songCounter = 0;
+            int songCounterLength = 4;
+            
+            System.out.println("\n");
+
+            for (Song song : selectedPlaylist.GetSongs())
+            {
+                songCounter++;
+                String formattedCounter = String.format("%-" + 
                     songCounterLength + "s", songCounter);
-            System.out.println(formattedCounter + song);
+                System.out.println(formattedCounter + song);
+            }
+            } 
+            else
+            {
+                System.out.println("Invalid playlist choice.");
+            }
         }
         System.out.println(ReturnToMenuStatement());
         userInput.nextLine();
     }
     
+    /**
+    * Asks the user to choose a playlist from available playlists
+    * @return The selected playlist
+    */
+    private static Playlist ChoosePlaylist() {
+        System.out.println("\nChoose a playlist:");
+
+        for (int i = 0; i < playlists.size(); i++) {
+            System.out.println((i + 1) + " | " + playlists.get(i).name);
+        }
+
+        int playlistChoice;
+
+        try {
+            playlistChoice = userInput.nextInt();
+            userInput.nextLine();
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Invalid input. Defaulted to first playlist.");
+            userInput.nextLine(); // Clear the invalid input
+            return getDefaultPlaylist();
+        }
+
+        if (playlistChoice >= 1 && playlistChoice <= playlists.size()) {
+            return playlists.get(playlistChoice - 1);
+        } else {
+            System.out.println("Invalid playlist choice. Defaulted to first playlist.");
+            return getDefaultPlaylist();
+        }
+    }
+    
+    /**
+     * Checks if playlist is empty, creates new playlist if non existent, else just uses default
+     * @return Default Playlist / new default playlist
+     */
+    private static Playlist getDefaultPlaylist() {
+    if (!playlists.isEmpty()) {
+        return playlists.get(0);
+    } else {
+        System.out.println("No playlists available. Creating a new one.");
+        String defaultPlaylistName = "Default Playlist";
+        Playlist defaultPlaylist = new Playlist(new ArrayList<>(), defaultPlaylistName);
+        playlists.add(defaultPlaylist);
+        return defaultPlaylist;
+    }
+}
+    
+    /**
+    * Adds a new playlist to the list of playlists.
+    */
+    private static void AddPlaylist() {
+        System.out.println("\tAdd Playlist\nEnter the name of the playlist:");
+        String playlistName = userInput.nextLine();
+
+        playlists.add(new Playlist(new ArrayList<>(), playlistName));
+
+        System.out.println("Playlist '" + playlistName + "' has been added.\n" + ReturnToMenuStatement());
+        userInput.nextLine();
+    }
+    
+    /**
+    * Removes a playlist from the list of playlists.
+    */
+   private static void RemovePlaylist() {
+       System.out.println("\tRemove Playlist\nChoose a playlist to remove:");
+
+       for (int i = 0; i < playlists.size(); i++) {
+           System.out.println((i + 1) + " | " + playlists.get(i).name);
+       }
+
+       int playlistChoice = userInput.nextInt();
+       userInput.nextLine();
+
+       if (playlistChoice >= 1 && playlistChoice <= playlists.size()) {
+           Playlist playlistToRemove = playlists.remove(playlistChoice - 1);
+           System.out.println("Playlist '" + playlistToRemove.name + "' has been removed.\n" + ReturnToMenuStatement());
+           userInput.nextLine();
+       } else {
+           System.out.println("Invalid playlist choice.\n" + ReturnToMenuStatement());
+           userInput.nextLine();
+       }
+   }
     
      /**
      * Initialises ArrayList for storing sorted songs
@@ -312,12 +435,16 @@ public class SongApplication
         int topSongCounter = 0;
         int songCounterLength = 3;
         
-        List<Song> sortedSongs = new ArrayList<>(songs);
+        List<Song> allSongs = new ArrayList<>();
         
-        Collections.sort(sortedSongs, (Song song1, Song song2) 
+        for (Playlist playlist : playlists) {
+            allSongs.addAll(playlist.GetSongs());
+        }
+        
+        Collections.sort(allSongs, (Song song1, Song song2) 
             -> Integer.compare(song2.playCount, song1.playCount));
         
-        for (Song song : sortedSongs)
+        for (Song song : allSongs)
         {
             topSongCounter++;
             String formattedCounter = String.format("%-" + 
@@ -354,7 +481,9 @@ public class SongApplication
         String searchQuery = userInput.nextLine();
         searchHistory.add(searchQuery);
         
-        for (Song song : songs)
+        Playlist selectedPlaylist = ChoosePlaylist();
+
+        for (Song song : selectedPlaylist.GetSongs())
         {
             songCounter++;
             String formattedCounter = String.format("%-" + 
@@ -488,6 +617,7 @@ public class SongApplication
 
         clip.stop();
     }
+    
    
      /**
      * Generates a random index of the song objects in songs and finds that song
@@ -495,21 +625,28 @@ public class SongApplication
      * 
      * Creates folder path, calls GetSong with the file pat variable
      */
-    private static void playRandomSong(){
-        ReturnEmptySongStatement();
-        
+    private static void playRandomSong() {
         System.out.println("\tMusic Player\n");
-                
-        int randomSongIndex = (int)(Math.random() * songs.size()); 
 
-        String randomSong = songs.get(randomSongIndex).songName;
+        Playlist selectedPlaylist = ChoosePlaylist();
+
+        if (selectedPlaylist.GetSongs().isEmpty()) {
+            System.out.println("No songs available in the selected playlist. Returning to the menu.");
+            userInput.nextLine();
+            return;
+        }
+
+        int randomSongIndex = (int) (Math.random() * selectedPlaylist.GetSongs().size());
+
+        String randomSong = selectedPlaylist.GetSongs().get(randomSongIndex).songName;
         randomSong = randomSong.toLowerCase();
-        
+
         String folderName = "songs";
         String filePath = folderName + "/" + randomSong + ".wav";
-        
+
         GetSong(filePath);
     }
+
     
     
     private static void ExitApplication()
