@@ -8,12 +8,15 @@
  * Date: November 9, 2023
  */
 
+
 package songapplication;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Represents a playlist with the associated attributes
+ */
 public class Playlist {
     List<Song> songs;
     public String name;
@@ -31,8 +34,8 @@ public class Playlist {
         songs.add(song);
     }
 
-public void RemoveSongs(List<Song> songsToRemove) {
-    songs.removeAll(songsToRemove);
-}
+    public void RemoveSongs(List<Song> songsToRemove) {
+        songs.removeAll(songsToRemove);
+    }
 
 }

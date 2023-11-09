@@ -232,7 +232,8 @@ public class SongApplication
         Playlist selectedPlaylist = ChoosePlaylist();
        
         selectedPlaylist.AddSong(new Song(songName, artistName, durationString, playCount));
-        System.out.println("\n" + songName + " by " + artistName + " has been added to " + selectedPlaylist.name);
+        System.out.println("\n" + songName + " by " + artistName + 
+                " has been added to " + selectedPlaylist.name);
         
         System.out.println(ReturnToMenuStatement());
         userInput.nextLine();
@@ -274,7 +275,8 @@ public class SongApplication
         { 
             selectedPlaylist.RemoveSongs(songsToRemove);
             System.out.println("\nThe Song " + songToRemove +
-                    " has been removed from" + selectedPlaylist.name + "\n" + ReturnToMenuStatement());
+                    " has been removed from" + 
+                    selectedPlaylist.name + "\n" + ReturnToMenuStatement());
             userInput.nextLine();
         } 
         
@@ -313,7 +315,8 @@ public class SongApplication
             int playlistChoice = userInput.nextInt();
             userInput.nextLine();
 
-            if(playlistChoice >= 1 && playlistChoice <= playlists.size()){
+            if(playlistChoice >= 1 && playlistChoice <= playlists.size())
+            {
                 Playlist selectedPlaylist = playlists.get(playlistChoice - 1);
 
             int songCounter = 0;
@@ -345,26 +348,33 @@ public class SongApplication
     private static Playlist ChoosePlaylist() {
         System.out.println("\nChoose a playlist:");
 
-        for (int i = 0; i < playlists.size(); i++) {
+        for (int i = 0; i < playlists.size(); i++) 
+        {
             System.out.println((i + 1) + " | " + playlists.get(i).name);
         }
 
         int playlistChoice;
 
-        try {
+        try 
+        {
             playlistChoice = userInput.nextInt();
             userInput.nextLine();
-        } catch (java.util.InputMismatchException e) {
+        } 
+        catch (java.util.InputMismatchException e) 
+        {
             System.out.println("Invalid input. Defaulted to first playlist.");
             userInput.nextLine(); // Clear the invalid input
-            return getDefaultPlaylist();
+            return GetDefaultPlaylist();
         }
 
-        if (playlistChoice >= 1 && playlistChoice <= playlists.size()) {
+        if (playlistChoice >= 1 && playlistChoice <= playlists.size()) 
+        {
             return playlists.get(playlistChoice - 1);
-        } else {
+        } 
+        else 
+        {
             System.out.println("Invalid playlist choice. Defaulted to first playlist.");
-            return getDefaultPlaylist();
+            return GetDefaultPlaylist();
         }
     }
     
@@ -372,10 +382,14 @@ public class SongApplication
      * Checks if playlist is empty, creates new playlist if non existent, else just uses default
      * @return Default Playlist / new default playlist
      */
-    private static Playlist getDefaultPlaylist() {
-    if (!playlists.isEmpty()) {
+    private static Playlist GetDefaultPlaylist() 
+    {
+    if (!playlists.isEmpty()) 
+    {
         return playlists.get(0);
-    } else {
+    } 
+    else 
+    {
         System.out.println("No playlists available. Creating a new one.");
         String defaultPlaylistName = "Default Playlist";
         Playlist defaultPlaylist = new Playlist(new ArrayList<>(), defaultPlaylistName);
@@ -387,34 +401,43 @@ public class SongApplication
     /**
     * Adds a new playlist to the list of playlists.
     */
-    private static void AddPlaylist() {
+    private static void AddPlaylist() 
+    {
         System.out.println("\tAdd Playlist\nEnter the name of the playlist:");
         String playlistName = userInput.nextLine();
 
         playlists.add(new Playlist(new ArrayList<>(), playlistName));
 
-        System.out.println("Playlist '" + playlistName + "' has been added.\n" + ReturnToMenuStatement());
+        System.out.println("Playlist '" + playlistName + 
+                "' has been added.\n" + ReturnToMenuStatement());
         userInput.nextLine();
     }
     
     /**
-    * Removes a playlist from the list of playlists.
+    * Lists available playlists
+    * Removes a playlist from the list of playlists from user input.
     */
-   private static void RemovePlaylist() {
+   private static void RemovePlaylist() 
+   {
        System.out.println("\tRemove Playlist\nChoose a playlist to remove:");
 
-       for (int i = 0; i < playlists.size(); i++) {
+       for (int i = 0; i < playlists.size(); i++) 
+       {
            System.out.println((i + 1) + " | " + playlists.get(i).name);
        }
 
        int playlistChoice = userInput.nextInt();
        userInput.nextLine();
 
-       if (playlistChoice >= 1 && playlistChoice <= playlists.size()) {
+       if (playlistChoice >= 1 && playlistChoice <= playlists.size()) 
+       {
            Playlist playlistToRemove = playlists.remove(playlistChoice - 1);
-           System.out.println("Playlist '" + playlistToRemove.name + "' has been removed.\n" + ReturnToMenuStatement());
+           System.out.println("Playlist '" + playlistToRemove.name +
+                   "' has been removed.\n" + ReturnToMenuStatement());
            userInput.nextLine();
-       } else {
+       } 
+       else 
+       {
            System.out.println("Invalid playlist choice.\n" + ReturnToMenuStatement());
            userInput.nextLine();
        }
@@ -630,8 +653,10 @@ public class SongApplication
 
         Playlist selectedPlaylist = ChoosePlaylist();
 
-        if (selectedPlaylist.GetSongs().isEmpty()) {
-            System.out.println("No songs available in the selected playlist. Returning to the menu.");
+        if (selectedPlaylist.GetSongs().isEmpty()) 
+        {
+            System.out.println("No songs available in the selected playlist. "
+                    + "Returning to the menu.");
             userInput.nextLine();
             return;
         }
