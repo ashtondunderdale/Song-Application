@@ -14,7 +14,6 @@ package songapplication;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-
 /**
  * Represents a song with the associated attributes
  */
@@ -22,8 +21,7 @@ public class Song {
     public String songName;
     public String artistName;
     public String durationString;
-    public int playCount;
-    
+    public int playCount;    
     
     /**
      * Creates a new song object with the associated attributes
@@ -39,7 +37,6 @@ public class Song {
         this.durationString = durationString;
         this.playCount = playCount;
     }
-    
     
     /**
      * Formats the output of the songs to make it cleaner and more readable
